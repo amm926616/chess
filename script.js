@@ -25,6 +25,19 @@ const initialBoard = [
     ["wr", "wn", "wb", "wq", "wk", "wb", "wn", "wr"],
 ];
 
+let beingDragged;
+
+function dragStart(e) {
+    beingDragged = e.target;
+}
+
+function dragOver(e) {
+    e.preventDefault();
+}
+
+function dragDrop(e) {
+    e.target.appendChild(beingDragged);
+}
 
 function createChessBoard() {
     const chessboard = document.getElementById("chessboard");
@@ -39,11 +52,18 @@ function createChessBoard() {
                 square.classList.add("black");
             }
 
+            // adding event to each square
+            square.addEventListener('dragover', dragOver);
+            square.addEventListener('drop', dragDrop);
+
             pieceCode = initialBoard[row][column];
             if (pieceCode) {
                 const pieceImage = document.createElement('img');
                 pieceImage.src = pieceImages[pieceCode];                
                 square.appendChild(pieceImage);
+
+                // adding event listener to image
+                pieceImage.addEventListener('dragstart', dragStart);
             }
 
             chessboard.appendChild(square);
